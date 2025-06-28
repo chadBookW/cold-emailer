@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold Email Sender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.05);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .icon-large {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .email-template {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .file-upload-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-upload-label {
+            display: block;
+            padding: 15px;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .file-upload-label:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="main-container p-5">
+                    <!-- Header -->
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 fw-bold text-primary mb-3">
+                            <i class="fas fa-envelope-open-text me-3"></i>
+                            Cold Email Sender
+                        </h1>
+                        <p class="lead text-muted">Send personalized cold emails to HR professionals and recruiters</p>
+                    </div>
+
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Features Section -->
+                    <div class="row mb-5">
+                        <div class="col-md-3">
+                            <div class="feature-card text-center">
+                                <i class="fas fa-upload icon-large"></i>
+                                <h5>Upload Files</h5>
+                                <p class="text-muted">Upload your contacts CSV and resume</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="feature-card text-center">
+                                <i class="fas fa-edit icon-large"></i>
+                                <h5>Customize</h5>
+                                <p class="text-muted">Edit email template and personal info</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="feature-card text-center">
+                                <i class="fas fa-magic icon-large"></i>
+                                <h5>Personalize</h5>
+                                <p class="text-muted">Auto-personalize with names and companies</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="feature-card text-center">
+                                <i class="fas fa-paper-plane icon-large"></i>
+                                <h5>Send</h5>
+                                <p class="text-muted">Send emails with resume attached</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Section -->
+                    <div class="upload-area mb-4">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <h4>Upload Your Files</h4>
+                        <p class="text-muted mb-4">Upload your CSV contacts and resume</p>
+                        
+                        <form action="{{ url_for('upload_files') }}" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-file-csv me-2"></i>Contacts CSV File
+                                        </label>
+                                        <div class="file-upload-wrapper">
+                                            <label for="csv_file" class="file-upload-label">
+                                                <i class="fas fa-upload me-2"></i>
+                                                Choose CSV file with contacts
+                                                <br><small class="text-muted">Format: Name, Company, Email</small>
+                                            </label>
+                                            <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-file-pdf me-2"></i>Resume (PDF)
+                                        </label>
+                                        <div class="file-upload-wrapper">
+                                            <label for="resume_file" class="file-upload-label">
+                                                <i class="fas fa-upload me-2"></i>
+                                                Choose your resume PDF
+                                                <br><small class="text-muted">Optional - will be attached to emails</small>
+                                            </label>
+                                            <input type="file" id="resume_file" name="resume_file" accept=".pdf">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-2"></i>Upload Files
+                            </button>
+                        </form>
+                        
+                        <div class="mt-3">
+                            <a href="{{ url_for('download_template') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-download me-2"></i>Download CSV Template
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Email Template Section -->
+                    <div class="feature-card">
+                        <h5 class="mb-3">
+                            <i class="fas fa-edit me-2"></i>
+                            Email Template
+                        </h5>
+                        <p class="text-muted mb-3">Customize your email template. Use placeholders: {recipient_name}, {company_name}, {your_name}, {your_phone}, {your_email}</p>
+                        
+                        <textarea class="form-control email-template" rows="12" id="emailTemplate" readonly>{{ config.EMAIL_TEMPLATE }}</textarea>
+                        
+                        <div class="mt-3">
+                            <button class="btn btn-outline-secondary" onclick="editTemplate()">
+                                <i class="fas fa-edit me-2"></i>Edit Template
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="resetTemplate()" style="display:none;" id="resetBtn">
+                                <i class="fas fa-undo me-2"></i>Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle me-2"></i>How to use:</h5>
+                        <ol class="mb-0">
+                            <li>Download the CSV template and fill it with your target contacts</li>
+                            <li>Upload your CSV file and resume using the form above</li>
+                            <li>Customize your email template and personal information</li>
+                            <li>Preview and send personalized emails with your resume attached</li>
+                        </ol>
+                    </div>
+
+                    <!-- Setup Instructions -->
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-cog me-2"></i>Setup Required:</h5>
+                        <p class="mb-2">Before using this tool, you need to:</p>
+                        <ul class="mb-0">
+                            <li>Update email settings in <code>config.py</code> (SMTP server, email, password)</li>
+                            <li>For Gmail, use an App Password instead of your regular password</li>
+                            <li>Enable 2-Factor Authentication on your Gmail account</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File upload preview
+        document.getElementById('csv_file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                e.target.previousElementSibling.innerHTML = `<i class="fas fa-check me-2"></i>${fileName}`;
+            }
+        });
+
+        document.getElementById('resume_file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                e.target.previousElementSibling.innerHTML = `<i class="fas fa-check me-2"></i>${fileName}`;
+            }
+        });
+
+        // Email template editing
+        function editTemplate() {
+            const textarea = document.getElementById('emailTemplate');
+            const editBtn = document.querySelector('button[onclick="editTemplate()"]');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            textarea.readOnly = false;
+            textarea.focus();
+            editBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+        }
+
+        function resetTemplate() {
+            const textarea = document.getElementById('emailTemplate');
+            const editBtn = document.querySelector('button[onclick="editTemplate()"]');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            textarea.value = `{{ config.EMAIL_TEMPLATE }}`;
+            
+            textarea.readOnly = true;
+            editBtn.style.display = 'inline-block';
+            resetBtn.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
