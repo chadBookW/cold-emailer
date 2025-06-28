@@ -135,8 +135,11 @@ def send_emails():
         for index, row in enumerate(df_data):
             try:
                 # Personalize the email
+                # Extract first name from full name
+                first_name = row['name'].split()[0] if row['name'] else row['name']
+                
                 personalized_message = custom_template.format(
-                    recipient_name=row['name'],
+                    recipient_name=first_name,
                     company_name=row['company'],
                     your_name=your_name,
                     your_phone=your_phone,

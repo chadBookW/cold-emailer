@@ -1,110 +1,116 @@
 # Cold Email Sender
 
-A modern Flask web application for sending personalized cold emails to HR professionals and recruiters with automatic resume attachments.
+A Flask web application for sending personalized cold emails to recruiters and HR professionals with resume attachments.
 
-## ✨ Features
+## Features
 
-- 📧 **Personalized Emails**: Automatically personalize emails with recipient name and company
-- 📎 **Resume Upload**: Upload your resume directly in the app
-- 📊 **CSV Upload**: Upload your contact list in CSV format
-- ✏️ **Editable Template**: Customize your email template in real-time
-- 👀 **Live Preview**: See how your emails will look before sending
-- 🚫 **Duplicate Prevention**: Automatically removes duplicate contacts
-- ⏱️ **Spam Prevention**: Built-in delays and limits to avoid spam detection
-- 🎨 **Modern UI**: Beautiful, responsive web interface
+- **Personalized Emails**: Auto-personalizes emails using recipient's first name and company
+- **Resume Attachment**: Automatically attaches your resume to each email
+- **CSV Import**: Upload contact lists in CSV format (Name, Company, Email)
+- **Custom Templates**: Editable email templates with placeholder support
+- **Spam Prevention**: Built-in delays and retry logic for better deliverability
+- **Modern UI**: Clean, responsive interface built with Bootstrap
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1. Install Dependencies
-```bash
-pip3 install -r requirements.txt
-```
+### Prerequisites
+- Python 3.7+
+- Gmail account with App Password (or other SMTP provider)
 
-### 2. Configure Email Settings
-Edit `config.py` and update:
-```python
-EMAIL_CONFIG = {
-    'smtp_server': 'smtp.gmail.com',
-    'smtp_port': 587,
-    'sender_email': 'your-email@gmail.com',
-    'sender_password': 'your-app-password'
-}
-```
+### Installation
 
-### 3. Start the Application
-```bash
-python3 app.py
-```
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd cold-mailer
+   ```
 
-### 4. Open Your Browser
-Navigate to: http://localhost:5001
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 📧 Gmail Setup
+3. **Configure email settings**
+   Edit `config.py` with your email credentials:
+   ```python
+   EMAIL_CONFIG = {
+       'smtp_server': 'smtp.gmail.com',
+       'smtp_port': 587,
+       'sender_email': 'your-email@gmail.com',
+       'sender_password': 'your-app-password'
+   }
+   ```
 
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate App Password**:
-   - Go to Google Account → Security → 2-Step Verification → App passwords
-   - Select "Mail" and generate password
-3. **Use the App Password** in config.py (not your regular password)
+4. **Run the application**
+   ```bash
+   python app.py
+   ```
 
-## 📁 CSV Format
+5. **Access the web interface**
+   Open http://127.0.0.1:5001 in your browser
 
-Your CSV should have these columns:
-```csv
-Name,Company,Email
-John Smith,Google,hr@google.com
-Jane Doe,Microsoft,recruiter@microsoft.com
-```
+## Usage
 
-## 🎯 How to Use
+### 1. Prepare Your Data
+- Create a CSV file with columns: `Name`, `Company`, `Email`
+- Example:
+  ```
+  Name,Company,Email
+  John Smith,Google,john.smith@google.com
+  Sarah Johnson,Microsoft,sarah.j@microsoft.com
+  ```
 
-1. **Upload Files**: Upload your CSV contacts and resume PDF
-2. **Customize Template**: Edit your email template with placeholders
-3. **Preview Data**: Review your contacts and email preview
-4. **Configure Info**: Fill in your personal information
-5. **Send Emails**: Send personalized emails with resume attached
+### 2. Upload Files
+- Upload your contacts CSV file
+- Upload your resume (PDF format)
 
-## 🔧 Email Template Placeholders
+### 3. Customize Email
+- Edit your personal information (name, phone, email)
+- Customize the email template if needed
+- Preview how emails will look
 
-Use these placeholders in your email template:
-- `{recipient_name}` - Recipient's name
+### 4. Send Emails
+- Review the preview of your first 10 contacts
+- Click "Send Emails" to start the campaign
+- Monitor progress in the console
+
+## Email Template
+
+The default template includes:
+- Personalized greeting with first name
+- Professional introduction
+- Mention of your background (Cisco Meraki internship)
+- Call to action
+- Contact information
+
+**Available placeholders:**
+- `{recipient_name}` - Recipient's first name
 - `{company_name}` - Company name
 - `{your_name}` - Your name
-- `{your_title}` - Your job title
-- `{your_skills}` - Your skills
 - `{your_phone}` - Your phone number
 - `{your_email}` - Your email address
 
-## ⚙️ Configuration
+## Configuration
 
-### Email Settings
-- **SMTP Server**: Your email provider's SMTP server
-- **Port**: Usually 587 for TLS
-- **App Password**: Use app password, not regular password
+### Email Settings (`config.py`)
+- SMTP server configuration
+- Email template customization
+- Sending limits and delays
 
-### Spam Prevention
-- **Delay**: 5 seconds between emails
-- **Session Limit**: 25 emails per session
-- **Daily Limit**: 100 emails per day
-- **Retry Attempts**: 3 attempts for failed emails
+### Sending Limits
+- **Per session**: 25 emails (configurable)
+- **Delay between emails**: 5 seconds
+- **Daily limit**: 100 emails
+- **Retry attempts**: 3 per email
 
-## 📊 Supported Email Providers
+## Security Notes
 
-- **Gmail**: `smtp.gmail.com:587`
-- **Outlook/Hotmail**: `smtp-mail.outlook.com:587`
-- **Yahoo**: `smtp.mail.yahoo.com:587`
+- Use App Passwords for Gmail (not your regular password)
+- Enable 2-Factor Authentication on your email account
+- Never commit email credentials to version control
+- Consider using environment variables for sensitive data
 
-## 🛡️ Security & Best Practices
-
-- ✅ Use App Passwords for Gmail
-- ✅ Enable 2-Factor Authentication
-- ✅ Start with small batches
-- ✅ Monitor delivery rates
-- ✅ Follow email marketing laws
-- ❌ Don't exceed daily limits
-- ❌ Avoid spam trigger words
-
-## 📝 File Structure
+## File Structure
 
 ```
 cold-mailer/
@@ -112,31 +118,40 @@ cold-mailer/
 ├── config.py           # Configuration settings
 ├── requirements.txt    # Python dependencies
 ├── templates/          # HTML templates
-│   ├── index.html     # Main upload page
-│   └── preview.html   # Preview and send page
-├── uploads/           # Uploaded files (auto-created)
-└── README.md          # This file
+│   ├── index.html     # Main interface
+│   └── preview.html   # Email preview and sending
+├── uploads/           # Temporary file storage
+└── README.md         # This file
 ```
 
-## 🆘 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
-1. **Port 5000 in use**: App runs on port 5001 to avoid AirPlay conflict
-2. **Gmail authentication**: Use App Password, not regular password
-3. **CSV format**: Ensure columns are Name, Company, Email
-4. **Resume upload**: Must be PDF format
 
-### Error Messages
-- **"Username and Password not accepted"**: Use App Password
-- **"Missing required columns"**: Check CSV format
-- **"Resume must be a PDF"**: Convert resume to PDF
+1. **"Address already in use"**
+   - The app runs on port 5001 to avoid macOS AirPlay conflicts
+   - If port 5001 is busy, change the port in `app.py`
 
-## 📄 License
+2. **Email sending fails**
+   - Verify your SMTP settings in `config.py`
+   - Check that you're using an App Password for Gmail
+   - Ensure 2-Factor Authentication is enabled
 
-This project is for educational purposes. Use responsibly and in compliance with applicable laws and email service provider terms of service.
+3. **CSV upload errors**
+   - Ensure your CSV has the correct column headers: `Name`, `Company`, `Email`
+   - Check that email addresses are valid
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-**Ready to send personalized cold emails?** 🚀
-
-Start the app and upload your contacts! 
+**Note**: This tool is designed for legitimate job applications. Please use responsibly and in compliance with email marketing laws and best practices. 
